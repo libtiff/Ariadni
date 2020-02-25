@@ -3,7 +3,10 @@ package libtiff.ariadni;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.net.http.SslError;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -29,12 +32,18 @@ public class MainActivity extends AppCompatActivity
         mAdView = findViewById(R.id.AdView);
         webview1  = (WebView) findViewById(R.id.webview1);
 
+        mAdView = findViewById(R.id.AdView);
+        webview1  = (WebView) findViewById(R.id.webview1);
+
         CookieSyncManager.createInstance(this);
         CookieManager.getInstance().setAcceptCookie(true);
-        MobileAds.initialize(this, "ca-app-pub-9082725429338291~9699329161");
+        MobileAds.initialize(this, "ca-app-pub-9082725429338291~4697500512");
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         final Activity activity = this;
+
+        WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         webview1.setWebViewClient(new WebViewClient()
         {
@@ -51,23 +60,25 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        webview1.getSettings().setSupportZoom(true);
-        webview1.getSettings().setBuiltInZoomControls(true);
-        webview1.getSettings().setDisplayZoomControls(false);
-        webview1.getSettings().setDomStorageEnabled(true);
-        webview1.getSettings().setJavaScriptEnabled(true);
-        webview1.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        webview1.getSettings().setUseWideViewPort(true);
-        webview1.getSettings().setLoadWithOverviewMode(true);
-        webview1.getSettings().setDefaultTextEncodingName("utf-8");
-        webview1 .loadUrl("https://eservices.cyprus.gov.cy/EL/Secure/Pages/Home.aspx");
+        if (wifi.isWifiEnabled() || connectivityManager.getActiveNetworkInfo()!= null){
+            //wifi/data is enabled
+            webview1.getSettings().setSupportZoom(true);
+            webview1.getSettings().setBuiltInZoomControls(true);
+            webview1.getSettings().setDisplayZoomControls(false);
+            webview1.getSettings().setDomStorageEnabled(true);
+            webview1.getSettings().setJavaScriptEnabled(true);
+            webview1.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+            webview1.getSettings().setUseWideViewPort(true);
+            webview1.getSettings().setLoadWithOverviewMode(true);
+            webview1.getSettings().setDefaultTextEncodingName("utf-8");
+            webview1 .loadUrl("https://eservices.cyprus.gov.cy/EL/Secure/Pages/Home.aspx");
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(),"No internet connection , please enable your wifi or data connection. Ενεργοποιήστε το ίντερνετ ή τα δεδομένα σας για να μπορέσει να τρέξει η εφαρμογή.",Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
-
-    public void checkpermissions()
-    {
-
-    }
-
     @Override
     public void onBackPressed()
     {
@@ -81,3 +92,4 @@ public class MainActivity extends AppCompatActivity
         }
     }
 }
+
