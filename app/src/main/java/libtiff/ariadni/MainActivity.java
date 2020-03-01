@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity
 
         CookieSyncManager.createInstance(this);
         CookieManager.getInstance().setAcceptCookie(true);
-        MobileAds.initialize(this, "ca-app-pub-9082725429338291~4697500512");
+        MobileAds.initialize(this, "ca-app-pub-9082725429338291~9094125652");
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         final Activity activity = this;
